@@ -31,7 +31,7 @@ namespace Banken_StorInl
                 Console.WriteLine("   Ta ut pengar från konto (4) ");
                 Console.WriteLine("   Ta bort konto (5) ");
                 Console.WriteLine("   Ta bort kund (6)");
-                Console.WriteLine("   (7)");
+                Console.WriteLine("   mackan(7)");
                 Console.WriteLine("   Avsluta programmet (8)");
                 
                 Console.Write("\n   Ditt val: ");
