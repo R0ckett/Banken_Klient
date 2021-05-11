@@ -41,6 +41,10 @@ namespace Banken_StorInl
             }
             saker = tempArr;
         }
+        public void Rensa()
+        {
+            saker = new T[0];
+        }
         public void SättVärde(T värde, int idx)
         {
             saker[idx] = värde;

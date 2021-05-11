@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Banken_StorInl
 {
-    class Konto
+    class Konto : IFormatString
     {
         double saldo;
         
@@ -24,5 +24,16 @@ namespace Banken_StorInl
             Console.WriteLine("Din nuvarande saldo är: " + saldo);
         }
 
+        public virtual string FormateraString()
+        {
+            string returnString = "";
+            returnString += saldo.ToString();
+            return returnString;
+        }
+        public virtual void GenereraFrånString(string input)
+        {
+            saldo = double.Parse(input);
+
+        }
     }
 }

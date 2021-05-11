@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IFormatString.cs" />
     <Compile Include="ISKkonto.cs" />
     <Compile Include="Konto.cs" />
     <Compile Include="Kund.cs" />

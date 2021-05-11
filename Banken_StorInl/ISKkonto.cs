@@ -6,13 +6,23 @@ using System.Threading.Tasks;
 
 namespace Banken_StorInl
 {
-    class ISKkonto : Konto
+    class ISKkonto : Konto, IFormatString
     {
         int AntalAktier;
         
         public ISKkonto(double saldo, int AntalAktier) : base(saldo)
         {
             this.AntalAktier = AntalAktier;
+        }
+        public override string FormateraString()
+        {
+            return "ISK(aktier) " + ";" + AntalAktier + ";" + "(Saldo): " + ";" +  base.FormateraString();
+        }
+        public override void GenereraFrånString(string input)
+        {
+            string[] arr = input.Split(';');
+            AntalAktier = int.Parse(arr[1]);
+            base.GenereraFrånString(arr[3]);
         }
 
     }

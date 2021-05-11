@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Banken_StorInl
 {
-    class Kund
+    class Kund : IFormatString
     {
         string namn;
         long personNummer;
@@ -51,16 +51,32 @@ namespace Banken_StorInl
                 string num = (i+1).ToString();
                 allaKonton += "[" + num + "]: " + konton.FåVärde(i).Saldo + "\n";
             }
-            return "Konton:\n" + allaKonton;
+            return "Namn: " + namn + "\nPersonnummer: " + personNummer + "\nKonton:\n" + allaKonton;
         }
-        public string Presentera()
+        public virtual string FormateraString()
         {
-            string allaKonton = "";
+            string returnString = "";
+            returnString += "namn: " + "#" + namn.ToString()+ "#" + "Personnummer: " +"#"+ personNummer.ToString()+ "#" + "Konton: ";
+
             for (int i = 0; i < konton.Count; i++)
             {
-                allaKonton += "[" + (i+1) + "]: " + konton.FåVärde(i) + "\n";
+                returnString += "#" + konton.FåVärde(i).FormateraString();
             }
-            return "Namn: " + namn + "\nPersonnummer: " + personNummer + "\nKonton:\n" + allaKonton; 
+            return returnString;
+        }
+        public virtual void GenereraFrånString(string input)
+        {
+            string[] arr = input.Split('#');
+            namn = arr[1];
+            personNummer = long.Parse(arr[3]);
+            konton.Rensa();
+            for (int i = 5; i < arr.Length; i++)
+            {
+                Konto k = new Konto(0);
+                k.GenereraFrånString(arr[i]);
+                konton.LäggTill(k);
+            }
+
         }
     }
 }

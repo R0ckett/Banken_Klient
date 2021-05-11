@@ -31,7 +31,7 @@ namespace Banken_StorInl
                 Console.WriteLine("   Ta ut pengar från konto (4) ");
                 Console.WriteLine("   Ta bort konto (5) ");
                 Console.WriteLine("   Ta bort kund (6)");
-                Console.WriteLine("   mackan(7)");
+                Console.WriteLine("   Presentera Kunder (7)");
                 Console.WriteLine("   Avsluta programmet (8)");
                 
                 Console.Write("\n   Ditt val: ");
@@ -222,43 +222,14 @@ namespace Banken_StorInl
             Console.WriteLine("Ansluten!");
             return tcpClient;
         }
-        /*
-        public static void BegärMeddelande(string ip, int port)
-        {
-            List<Användare> messages = new List<Användare>();
-
-            Byte[] bMessage = Encoding.ASCII.GetBytes("RequestMessages");
-            TcpClient tcpClient = ConnectToServer(ip, port);
-            NetworkStream tcpStream = tcpClient.GetStream();
-            tcpStream.Write(bMessage, 0, bMessage.Length);
-
-            byte[] bRead = new byte[256];
-            int bReadSize = tcpStream.Read(bRead, 0, bRead.Length);
-
-            string messageString = "";
-            for (int i = 0; i < bReadSize; i++)
-            {
-                messageString += Convert.ToChar(bRead[i]);
-            }
-
-            for (int i = 0; i < messageString.Split(';').Length - 1; i++)
-            {
-                Användare message = new Användare(messageString.Split(';')[i]);
-                message.Kryptera(-8);
-                Console.WriteLine(message.SkrivUt());
-            }
-            Console.ReadLine();
-        }
-        
-        public static void SkickaMeddelande(List<Användare> medd, string ip, int port)
+        public static void SkickaMeddelande(List<Kund> lista, string ip, int port)
         {
             TcpClient tcpClient = ConnectToServer(ip, port);
             NetworkStream tcpStream = tcpClient.GetStream();
             string message = "";
-            for (int i = 0; i < medd.Count; i++)
+            for (int i = 0; i < lista.Count; i++)
             {
-                medd[i].Kryptera(8);
-                message += medd[i].SkrivUt() + ";";
+                message += lista.FåVärde(i).PresenteraKonton() + ";";
             }
             Byte[] bMessage = Encoding.ASCII.GetBytes(message);
             tcpStream.Write(bMessage, 0, bMessage.Length);
@@ -266,6 +237,6 @@ namespace Banken_StorInl
             Console.WriteLine("Meddelande skickat!");
             Console.ReadLine();
         }
-        */
+
     }
 }
