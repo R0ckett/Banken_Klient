@@ -8,8 +8,11 @@ namespace Banken_StorInl
 {
     class Konto : IFormatString
     {
-        double saldo;
-        
+        protected double saldo;
+        public Konto()
+        {
+            this.saldo = 0;
+        }
         public Konto(double saldo)
         {
             this.saldo = saldo;
@@ -19,11 +22,20 @@ namespace Banken_StorInl
             set { saldo = value; }
             get { return saldo; }
         }
+        public Konto(string kontoRepresentationString)
+        {
+            saldo = double.Parse(kontoRepresentationString);
+        }
         public void SkrivUtSaldo()
         {
             Console.WriteLine("Din nuvarande saldo är: " + saldo);
         }
          
+        public virtual string Presentera()
+        {
+            return "saldo: " + saldo;
+        }
+
         public virtual string FormateraString()
         {
             string returnString = "";

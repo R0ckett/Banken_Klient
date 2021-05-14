@@ -14,6 +14,16 @@ namespace Banken_StorInl
         {
             this.AntalAktier = AntalAktier;
         }
+        public ISKkonto(string iskkontoString)
+        {
+            string[] arr = iskkontoString.Split(';');
+            AntalAktier = int.Parse(arr[1]);
+            saldo = double.Parse(arr[3]);
+        }
+        public override string Presentera()
+        {
+            return "saldo: " + saldo + " antal aktier: " + AntalAktier;
+        }
         public override string FormateraString()
         {
             return "ISK(aktier) " + ";" + AntalAktier + ";" + "(Saldo): " + ";" +  base.FormateraString();

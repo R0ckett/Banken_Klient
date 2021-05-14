@@ -18,12 +18,14 @@ namespace Banken_StorInl
             //skapa ip och port (= socket)
             string ip = "127.0.0.1";
             int port = 8001;
-
             List<Kund> Kunder = new List<Kund>();
+            Kunder = BegärMeddelande(ip, port);
+
             int kundNum = 0;
+
             while (true)
             {
-                Console.Clear();
+                //Console.Clear();
                 Console.WriteLine("\n   Vad vill du göra?");
                 Console.WriteLine("   Skapa ny kund (1)");
                 Console.WriteLine("   Skapa ett nytt konto för nuvarande kund (2)");
@@ -206,10 +208,20 @@ namespace Banken_StorInl
                 }
                 else if (menuChoice == "7")
                 {
-                    break;
+                    Console.WriteLine();
+                    for (int i = 0; i < Kunder.Count; i++)
+                    {
+                        Console.WriteLine("Namn: " + Kunder.FåVärde(i).Namn + " PersonNummer: " + Kunder.FåVärde(i).PersonNummer);
+                        for (int j = 0; j < Kunder.FåVärde(i).Konton.Count; j++)
+                        {
+                            Console.WriteLine("(" + (j+1) + ")" + Kunder.FåVärde(i).Konton.FåVärde(j).Presentera());
+                        }
+                    }
+                    Console.ReadLine();
                 }
                 else if (menuChoice == "8")
                 {
+                    SkickaKunder(Kunder, ip, port);
                     break;
                 }
             }
@@ -222,20 +234,50 @@ namespace Banken_StorInl
             Console.WriteLine("Ansluten!");
             return tcpClient;
         }
-        public static void SkickaMeddelande(List<Kund> lista, string ip, int port)
+        public static void SkickaKunder(List<Kund> lista, string ip, int port)
         {
             TcpClient tcpClient = ConnectToServer(ip, port);
             NetworkStream tcpStream = tcpClient.GetStream();
             string message = "";
             for (int i = 0; i < lista.Count; i++)
-            {
-                message += lista.FåVärde(i).PresenteraKonton() + ";";
+            {            
+                message += lista.FåVärde(i).FormateraString();
+                if (i != lista.Count -1 )
+                {
+                    message += "%";
+                }
             }
             Byte[] bMessage = Encoding.ASCII.GetBytes(message);
             tcpStream.Write(bMessage, 0, bMessage.Length);
             tcpClient.Close();
             Console.WriteLine("Meddelande skickat!");
             Console.ReadLine();
+        }
+        public static List<Kund> BegärMeddelande(string ip, int port)
+        {
+            List<Kund> Kunder = new List<Kund>();
+
+            Byte[] bMessage = Encoding.ASCII.GetBytes("RequestMessages");
+            TcpClient tcpClient = ConnectToServer(ip, port);
+            NetworkStream tcpStream = tcpClient.GetStream();
+            tcpStream.Write(bMessage, 0, bMessage.Length);
+
+            byte[] bRead = new byte[256];
+            int bReadSize = tcpStream.Read(bRead, 0, bRead.Length);
+
+            string messageString = "";
+            for (int i = 0; i < bReadSize; i++)
+            {
+                messageString += Convert.ToChar(bRead[i]);
+            }
+            Console.WriteLine("hej");
+            Console.WriteLine(messageString);
+            string[] KundStrings = messageString.Split('%');
+            for (int i = 0; i < KundStrings.Length; i++)
+            {
+                Kunder.LäggTill(new Kund(KundStrings[i]));
+            }
+            return Kunder;
         }
 
     }

@@ -22,6 +22,28 @@ namespace Banken_StorInl
             this.personNummer = personNummer;
             this.konton = konton;
         }
+        public Kund(string kundRepresentationString)
+        {
+            string[] arr = kundRepresentationString.Split('#');
+            namn = arr[1];
+            personNummer = long.Parse(arr[3]);
+            konton.Rensa();
+
+            for (int i = 5; i < arr.Length; i++)
+            {
+                Konto k;
+                string kontostring = arr[i];
+                if (kontostring.Substring(0, 9) == "Sparkonto")
+                {
+                    k = new Sparkonto(kontostring);
+                }
+                else
+                {
+                    k = new ISKkonto(kontostring);
+                }
+                konton.LäggTill(k);
+            }
+        }
         public List<Konto> Konton
         {
             get { return konton; }

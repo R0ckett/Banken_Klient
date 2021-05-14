@@ -14,6 +14,16 @@ namespace Banken_StorInl
         {
             this.ränta = ränta;
         }
+        public Sparkonto(string sparkontoString)
+        {
+            string[] arr = sparkontoString.Split(';');
+            ränta = int.Parse(arr[1]);
+            saldo = double.Parse(arr[3]);
+        }
+        public override string Presentera()
+        {
+            return "saldo: " + saldo + " ränta: " + ränta + "%";
+        }
         public override string FormateraString()
         {
             return "Sparkonto (ränta): " + ";" + ränta + ";" + "(Saldo): " + ";" + base.FormateraString();
