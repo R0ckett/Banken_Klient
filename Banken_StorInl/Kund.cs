@@ -53,7 +53,7 @@ namespace Banken_StorInl
             }
             return "Namn: " + namn + "\nPersonnummer: " + personNummer + "\nKonton:\n" + allaKonton;
         }
-        public virtual string FormateraString()
+        public string FormateraString()
         {
             string returnString = "";
             returnString += "namn: " + "#" + namn.ToString()+ "#" + "Personnummer: " +"#"+ personNummer.ToString()+ "#" + "Konton: ";
@@ -64,7 +64,7 @@ namespace Banken_StorInl
             }
             return returnString;
         }
-        public virtual void GenereraFrånString(string input)
+        public void GenereraFrånString(string input)
         {
             string[] arr = input.Split('#');
             namn = arr[1];

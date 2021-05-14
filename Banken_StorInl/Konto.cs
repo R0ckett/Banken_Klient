@@ -23,7 +23,7 @@ namespace Banken_StorInl
         {
             Console.WriteLine("Din nuvarande saldo är: " + saldo);
         }
-
+         
         public virtual string FormateraString()
         {
             string returnString = "";
@@ -33,7 +33,6 @@ namespace Banken_StorInl
         public virtual void GenereraFrånString(string input)
         {
             saldo = double.Parse(input);
-
         }
     }
 }
