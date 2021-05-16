@@ -18,8 +18,9 @@ namespace Banken_StorInl
             //skapa ip och port (= socket)
             string ip = "127.0.0.1";
             int port = 8001;
+            //skapar kundlistan, här kallas servern ifall det redan finns ett xml document med info om listan och sätter in den listan här i klienten.
             List<Kund> Kunder = new List<Kund>();
-            Kunder = BegärMeddelande(ip, port);
+            Kunder = BegärKunder(ip, port);
 
             int kundNum = 0;
 
@@ -40,11 +41,13 @@ namespace Banken_StorInl
                 string menuChoice = Console.ReadLine();
                 if (menuChoice != "1" && menuChoice != "2" && menuChoice != "3" && menuChoice != "4" && menuChoice != "5" && menuChoice != "6" && menuChoice != "7" && menuChoice != "8")
                 {
+                    //felhantering om användaren inte väljer ett av alternativen
                     Console.WriteLine("\n   Icke accepterbart svar, skriv: \"1\", \"2\", \"3\", \"4\", \"5\", \"6\" ,\"7\" eller \"8\" ");
                     Console.ReadKey();
                 }
                 else if (menuChoice == "1")
                 {
+                    //skapar kundobjekt och lägger den i kundlistan
                     Console.Clear();
                     Console.WriteLine("\nDitt Kundnummer: " + (kundNum + 1));
                     kundNum++;
@@ -56,6 +59,8 @@ namespace Banken_StorInl
                 }
                 else if (menuChoice == "2")
                 {
+                    //skapar konton efter att ha fått ett kundnummer som användaren använder som siffra för att identifiera sina konton
+                    //en if check som kollar att det finns en kund
                     Console.Clear();
                     if (kundNum == 0)
                     {
@@ -100,6 +105,7 @@ namespace Banken_StorInl
                 }
                 else if (menuChoice == "3")
                 {
+                    //användaren skriver sitt kundnummer och väljer konto för att öka sin saldo på det konton
                     Console.Clear();
                     int mängdKonton = 0;
                     for (int index = 0; index < Kunder.Count; index++)
@@ -129,6 +135,7 @@ namespace Banken_StorInl
                 }
                 else if (menuChoice == "4")
                 {
+                    //användaren skriver sitt kundnummer och väljer konto för att minska sin saldo på det konton
                     Console.Clear();
                     int mängdKonton = 0;
                     for (int index = 0; index < Kunder.Count; index++)
@@ -158,6 +165,7 @@ namespace Banken_StorInl
                 }
                 else if (menuChoice == "5")
                 {
+                    //här presenteras kontona för användaren som sedan får välja vilket konto som ska tas bort med hjälp av metoder från list-klassen
                     Console.Clear();
                     int mängdKonton = 0;
                     for (int index = 0; index < Kunder.Count; index++)
@@ -187,6 +195,7 @@ namespace Banken_StorInl
                 }
                 else if (menuChoice == "6")
                 {
+                    //användaren skriver in sitt kundnummer om hen vill ta bort sitt konto. oxå med hjälp av listklassen.
                     Console.Clear();
                     
                     if (kundNum == 0)
@@ -208,6 +217,7 @@ namespace Banken_StorInl
                 }
                 else if (menuChoice == "7")
                 {
+                    //metoder från konto-klassen och härledda klasser som ärver den metoden används för att presentera alla konton och kunduppgifter.
                     Console.WriteLine();
                     for (int i = 0; i < Kunder.Count; i++)
                     {
@@ -221,6 +231,7 @@ namespace Banken_StorInl
                 }
                 else if (menuChoice == "8")
                 {
+                    //när programmet avslutas så sparas alla kunder och deras konton och skickas till servern
                     SkickaKunder(Kunder, ip, port);
                     break;
                 }
@@ -228,6 +239,7 @@ namespace Banken_StorInl
         }
         public static TcpClient ConnectToServer(string ip, int port)
         {
+            //Metod som ansluter till server.
             Console.WriteLine("Ansluter till " + ip + ":" + port);
             TcpClient tcpClient = new TcpClient();
             tcpClient.Connect(ip, port);
@@ -236,6 +248,8 @@ namespace Banken_StorInl
         }
         public static void SkickaKunder(List<Kund> lista, string ip, int port)
         {
+            //Denna metod tar emot en lista med kunder och gör om att till en string. OBS i stringen så läggs ett procenttecken in(%) som skiljer på kunderna, detta är för att kunna splita i servern.
+            //Sedan skickas denna string till servern som senare formaterar det till xml.
             TcpClient tcpClient = ConnectToServer(ip, port);
             NetworkStream tcpStream = tcpClient.GetStream();
             string message = "";
@@ -253,8 +267,9 @@ namespace Banken_StorInl
             Console.WriteLine("Meddelande skickat!");
             Console.ReadLine();
         }
-        public static List<Kund> BegärMeddelande(string ip, int port)
+        public static List<Kund> BegärKunder(string ip, int port)
         {
+            //metod som begär kunder från server som kallas i början av programmet. Den returnerar allstå sen ny lista fylld med kundinfon hämtat från ett xml document som sparats tidigare.
             List<Kund> Kunder = new List<Kund>();
 
             Byte[] bMessage = Encoding.ASCII.GetBytes("RequestMessages");
@@ -270,8 +285,6 @@ namespace Banken_StorInl
             {
                 messageString += Convert.ToChar(bRead[i]);
             }
-            Console.WriteLine("hej");
-            Console.WriteLine(messageString);
             string[] KundStrings = messageString.Split('%');
             for (int i = 0; i < KundStrings.Length; i++)
             {

@@ -8,6 +8,7 @@ namespace Banken_StorInl
 {
     interface IFormatString
     {
+        //interface för att metoder som fyller objektets data från en string och metoder som formaterar objekts data till en string.
         void GenereraFrånString(string input);
         string FormateraString();
     }
